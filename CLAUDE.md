@@ -194,6 +194,12 @@ npm install deck.gl @geoarrow/deck.gl-layers @duckdb/duckdb-wasm @uwdata/mosaic-
 
 ---
 
+## Git Workflow
+
+- **New branch for every feature** - don't commit features directly to main
+
+---
+
 ## Session Notes
 
 *Use this section to track progress across sessions.*
