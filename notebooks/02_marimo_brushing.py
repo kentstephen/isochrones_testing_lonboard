@@ -203,7 +203,6 @@ def _(isochrones_gdf, restaurants_gdf):
     m = Map(
         layers=[polygon_layer, point_layer],
         basemap=CartoStyle.Positron,
-        _height=600,
     )
     m
     return Map, ScatterplotLayer, SolidPolygonLayer, apply_categorical_cmap, lonboard, m, point_layer, polygon_layer
