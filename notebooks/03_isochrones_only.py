@@ -1,6 +1,6 @@
 import marimo
 
-__generated_with = "0.10.19"
+__generated_with = "0.19.7"
 app = marimo.App(width="medium")
 
 
@@ -18,18 +18,16 @@ def _():
     import networkx as nx
     from shapely.geometry import Point, MultiPoint
     from shapely import concave_hull
-    return Point, MultiPoint, concave_hull, duckdb, gpd, nx, ox
+    return MultiPoint, Point, concave_hull, duckdb, gpd, nx, ox
 
 
 @app.cell
 def _(mo):
-    mo.md(
-        """
-        # Isochrone Visualization
+    mo.md("""
+    # Isochrone Visualization
 
-        Proper walking isochrones using concave hull - beautiful geometries showing reachable area.
-        """
-    )
+    Proper walking isochrones using concave hull - beautiful geometries showing reachable area.
+    """)
     return
 
 
@@ -88,7 +86,7 @@ def _(bbox, con, gpd, wkt_geom):
         geometry=gpd.points_from_xy(restaurants_df['lon'], restaurants_df['lat']),
         crs="EPSG:4326"
     )
-    return restaurants_df, restaurants_gdf
+    return (restaurants_gdf,)
 
 
 @app.cell
@@ -109,7 +107,7 @@ def _(bbox, ox):
         data['travel_time'] = data.get('length', 0) / 75.0
 
     crs_proj = G_proj.graph['crs']
-    return G, G_proj, crs_proj, osm_bbox
+    return G_proj, crs_proj
 
 
 @app.cell
@@ -173,17 +171,20 @@ def _(G_proj, crs_proj, generate_isochrone, gpd, restaurants_gdf):
 
     isochrones_gdf = gpd.GeoDataFrame(isochrone_records, crs="EPSG:4326")
     isochrones_gdf
-    return TRIP_TIMES, isochrone_records, isochrones_gdf
+    return (isochrones_gdf,)
 
 
 @app.cell
 def _(mo):
-    mo.md("## Isochrone Map")
+    mo.md("""
+    ## Isochrone Map
+    """)
     return
 
 
 @app.cell
 def _(isochrones_gdf):
+    import numpy as np
     from lonboard import Map, SolidPolygonLayer
 
     # Color by time: 5min=green, 10min=yellow, 15min=red
@@ -195,19 +196,18 @@ def _(isochrones_gdf):
         else:
             return [255, 80, 80, 80]
 
-    colors = [get_color(m) for m in isochrones_gdf['minutes']]
-    isochrones_gdf['color'] = colors
+    colors = np.array([get_color(m) for m in isochrones_gdf['minutes']], dtype=np.uint8)
 
     layer = SolidPolygonLayer.from_geopandas(
         isochrones_gdf,
-        get_fill_color='color',
+        get_fill_color=colors,
         pickable=True,
         auto_highlight=True,
     )
 
     m = Map(layers=[layer])
     m
-    return Map, SolidPolygonLayer, colors, get_color, layer, m
+    return
 
 
 if __name__ == "__main__":
