@@ -1,0 +1,33 @@
+[project]
+name = "fsq-iso-sqlrooms"
+version = "0.1.0"
+description = "Burlington VT POI Competition Explorer with walking isochrones"
+requires-python = ">=3.11"
+dependencies = [
+    # Data processing
+    "geopandas>=0.14.0",
+    "pyarrow>=14.0.0",
+    "shapely>=2.0.0",
+    # Network analysis + isochrones
+    "osmnx>=1.9.0",
+    "networkx>=3.0",
+    "scipy>=1.12.0",
+    # Query engines
+    "duckdb>=1.4.0",
+    "datafusion>=43.0.0",
+    # Visualization
+    "lonboard>=0.9.0",
+    "matplotlib>=3.8.0",
+    # Notebook dev
+    "ipykernel>=6.29.0",
+    "marimo>=0.10.0",
+    # Progress bars
+    "tqdm>=4.66.0",
+    "jupyter>=1.1.1",
+    "lab>=8.8",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+]
